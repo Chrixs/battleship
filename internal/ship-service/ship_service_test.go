@@ -46,3 +46,55 @@ func TestCreatesFleetCorrectly(t *testing.T) {
 	assert.Contains(t, ships, submarine)
 	assert.Contains(t, ships, destroyer)
 }
+
+func TestShipsCantOverlap(t *testing.T) {
+	carrier := types.Ship{
+		Type:       "Carrier",
+		Length:     5,
+		GridSpaces: []int{2, 12, 22, 32, 42},
+	}
+
+	cruiser := types.Ship{
+		Type:   "Cruiser",
+		Length: 3,
+	}
+
+	player := types.Player{
+		ID:    1,
+		Ships: []types.Ship{carrier, cruiser},
+	}
+
+	request := types.DeploymentRequest{
+		PlayerId:   1,
+		ShipType:   "Cruiser",
+		GridNumber: 11,
+		IsVertical: false,
+	}
+
+	_, err := DeployPlayerShip(request, &player)
+
+	assert.Equal(t, err.Error(), "overlapping ship deployment")
+}
+
+func TestShipTypeNotFoundCase(t *testing.T) {
+	cruiser := types.Ship{
+		Type:   "Cruiser",
+		Length: 3,
+	}
+
+	player := types.Player{
+		ID:    1,
+		Ships: []types.Ship{cruiser},
+	}
+
+	request := types.DeploymentRequest{
+		PlayerId:   1,
+		ShipType:   "FlyingDoomShip",
+		GridNumber: 11,
+		IsVertical: false,
+	}
+
+	_, err := DeployPlayerShip(request, &player)
+
+	assert.Equal(t, err.Error(), "ship type given does not match types in play")
+}

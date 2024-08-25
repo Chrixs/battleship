@@ -12,3 +12,10 @@ func CreateNewPlayer(id int) types.Player {
 	}
 	return player
 }
+
+func GetPlayerFromId(playerOne *types.Player, playerTwo *types.Player, id int) *types.Player {
+	if playerOne.ID == id {
+		return playerOne
+	}
+	return playerTwo
+}
