@@ -1,6 +1,8 @@
 package playerservice
 
 import (
+	"battleship/internal/factory"
+	types "battleship/internal/types"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,4 +11,27 @@ import (
 func TestCreatesPlayerWithCorrectId(t *testing.T) {
 	player := CreateNewPlayer(1)
 	assert.Equal(t, player.ID, 1)
+}
+
+func TestCantFireInSamePlaceTwice(t *testing.T) {
+	attacker := CreateNewPlayer(1)
+	attacker.ShotsFired = []int{100}
+	defender := CreateNewPlayer(2)
+
+	_, err := Fire(100, &attacker, &defender)
+	assert.Equal(t, err.Error(), "already fired at this location")
+}
+
+func TestReturnsWinner(t *testing.T) {
+	ship := factory.Ship("Smallship", 1)
+	ship.Coordinates = []int{1}
+	ship.Health = 1
+
+	playerOne := factory.Player(1)
+	playerTwo := factory.Player(2)
+	playerTwo.Ships = []types.Ship{ship}
+
+	firedShot, _ := Fire(1, &playerOne, &playerTwo)
+
+	assert.Equal(t, firedShot.Winner, true)
 }

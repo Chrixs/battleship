@@ -1,6 +1,7 @@
 package shipservice
 
 import (
+	"battleship/internal/factory"
 	"battleship/internal/types"
 	"testing"
 
@@ -48,26 +49,16 @@ func TestCreatesFleetCorrectly(t *testing.T) {
 }
 
 func TestShipsCantOverlap(t *testing.T) {
-	carrier := types.Ship{
-		Type:       "Carrier",
-		Length:     5,
-		GridSpaces: []int{2, 12, 22, 32, 42},
-	}
-
-	cruiser := types.Ship{
-		Type:   "Cruiser",
-		Length: 3,
-	}
-
-	player := types.Player{
-		ID:    1,
-		Ships: []types.Ship{carrier, cruiser},
-	}
+	carrier := factory.Ship("Carrier", 5)
+	carrier.Coordinates = []int{2, 12, 22, 32, 42}
+	cruiser := factory.Ship("Cruiser", 3)
+	player := factory.Player(1)
+	player.Ships = append(player.Ships, carrier, cruiser)
 
 	request := types.DeploymentRequest{
 		PlayerId:   1,
 		ShipType:   "Cruiser",
-		GridNumber: 11,
+		Coordinate: 11,
 		IsVertical: false,
 	}
 
@@ -77,20 +68,14 @@ func TestShipsCantOverlap(t *testing.T) {
 }
 
 func TestShipTypeNotFoundCase(t *testing.T) {
-	cruiser := types.Ship{
-		Type:   "Cruiser",
-		Length: 3,
-	}
-
-	player := types.Player{
-		ID:    1,
-		Ships: []types.Ship{cruiser},
-	}
+	cruiser := factory.Ship("Cruiser", 3)
+	player := factory.Player(1)
+	player.Ships = append(player.Ships, cruiser)
 
 	request := types.DeploymentRequest{
 		PlayerId:   1,
 		ShipType:   "FlyingDoomShip",
-		GridNumber: 11,
+		Coordinate: 11,
 		IsVertical: false,
 	}
 

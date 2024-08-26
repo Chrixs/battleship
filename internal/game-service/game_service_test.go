@@ -1,6 +1,7 @@
 package gameservice
 
 import (
+	"battleship/internal/factory"
 	"battleship/internal/types"
 	"testing"
 
@@ -8,79 +9,85 @@ import (
 )
 
 func TestItDeploys(t *testing.T) {
-	ship := types.Ship{
-		Type:   "Smallship",
-		Length: 1,
-	}
+	ship := factory.Ship("Smallship", 1)
 
 	deployedShip, _ := DeployShip(1, false, ship)
-	assert.Equal(t, deployedShip.GridSpaces, []int{1})
+	assert.Equal(t, deployedShip.Coordinates, []int{1})
 }
 
 func TestItCantDeployAlreadyDeployedShip(t *testing.T) {
-	ship := types.Ship{
-		Type:       "Smallship",
-		Length:     1,
-		GridSpaces: []int{1},
-	}
+	ship := factory.Ship("Smallship", 1)
+	ship.Coordinates = []int{1}
 
 	_, err := DeployShip(1, false, ship)
 	assert.Equal(t, err.Error(), "cannot deploy ship that is already deployed")
 }
 
 func TestItDeploysHorizontally(t *testing.T) {
-	ship := types.Ship{
-		Type:   "Destroyer",
-		Length: 2,
-	}
+	ship := factory.Ship("Destroyer", 2)
 
 	deployedShip, _ := DeployShip(1, false, ship)
-	assert.Equal(t, deployedShip.GridSpaces, []int{1, 2})
+	assert.Equal(t, deployedShip.Coordinates, []int{1, 2})
 }
 
 func TestDeployCantOverflowRow(t *testing.T) {
-	ship := types.Ship{
-		Type:   "Cruiser",
-		Length: 3,
-	}
+	ship := factory.Ship("Cruiser", 3)
 
 	_, err := DeployShip(9, false, ship)
 	assert.Equal(t, err.Error(), "ship deployment exceeds game bounds")
 }
 
 func TestItDeploysVertically(t *testing.T) {
-	ship := types.Ship{
-		Type:   "Destroyer",
-		Length: 2,
-	}
+	ship := factory.Ship("Destroyer", 2)
 
 	deployedShip, _ := DeployShip(1, true, ship)
-	assert.Equal(t, deployedShip.GridSpaces, []int{1, 11})
+	assert.Equal(t, deployedShip.Coordinates, []int{1, 11})
 }
 
 func TestDeployCantExceedColumnBounds(t *testing.T) {
-	ship := types.Ship{
-		Type:   "Cruiser",
-		Length: 3,
-	}
+	ship := factory.Ship("Cruiser", 3)
 
 	_, err := DeployShip(91, true, ship)
 	assert.Equal(t, err.Error(), "ship deployment exceeds game bounds")
 }
 
-// func TestShipsCantOverlap(t *testing.T) {
-// 	carrier := types.Ship{
-// 		Type:   "Carrier",
-// 		Length: 5,
-// 	}
+func TestCanFireOnShipAndReturnHit(t *testing.T) {
+	carrier := factory.Ship("Carrier", 5)
+	carrier.Coordinates = []int{1, 2, 3, 4, 5}
 
-// 	DeployShip(2, true, carrier)
+	playerOne := factory.Player(1)
+	playerTwo := factory.Player(2)
+	playerTwo.Ships = []types.Ship{carrier}
 
-// 	cruiser := types.Ship{
-// 		Type:   "Cruiser",
-// 		Length: 3,
-// 	}
-// 	_, err := DeployShip(11, false, cruiser)
+	_, firedShot, _ := FireCalculation(1, playerOne, playerTwo)
 
-// 	assert.Equal(t, err.Error(), "overlapping ship deployment")
-// }
+	assert.Equal(t, firedShot.Status, "hit")
+}
+
+func TestCanFireOnShipAndReturnMiss(t *testing.T) {
+	carrier := factory.Ship("Carrier", 5)
+	carrier.Coordinates = []int{1, 2, 3, 4, 5}
+
+	playerOne := factory.Player(1)
+	playerTwo := factory.Player(2)
+	playerTwo.Ships = []types.Ship{carrier}
+
+	_, firedShot, _ := FireCalculation(6, playerOne, playerTwo)
+
+	assert.Equal(t, firedShot.Status, "miss")
+}
+
+func TestCanFireOnShipAndDetectSunk(t *testing.T) {
+	carrier := factory.Ship("Carrier", 5)
+	carrier.Coordinates = []int{1, 2, 3, 4, 5}
+	carrier.Health = 1
+
+	playerOne := factory.Player(1)
+	playerTwo := factory.Player(2)
+	playerTwo.Ships = []types.Ship{carrier}
+
+	_, firedShot, _ := FireCalculation(1, playerOne, playerTwo)
+
+	assert.Equal(t, firedShot.Status, "sunk")
+	assert.Equal(t, firedShot.ShipType, "Carrier")
+}
