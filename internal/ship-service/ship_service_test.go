@@ -52,7 +52,7 @@ func TestShipsCantOverlap(t *testing.T) {
 	carrier := factory.Ship("Carrier", 5)
 	carrier.Coordinates = []int{2, 12, 22, 32, 42}
 	cruiser := factory.Ship("Cruiser", 3)
-	player := factory.Player(1)
+	player := factory.Player(1, true)
 	player.Ships = append(player.Ships, carrier, cruiser)
 
 	request := types.DeploymentRequest{
@@ -69,7 +69,7 @@ func TestShipsCantOverlap(t *testing.T) {
 
 func TestShipTypeNotFoundCase(t *testing.T) {
 	cruiser := factory.Ship("Cruiser", 3)
-	player := factory.Player(1)
+	player := factory.Player(1, true)
 	player.Ships = append(player.Ships, cruiser)
 
 	request := types.DeploymentRequest{

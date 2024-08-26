@@ -12,9 +12,10 @@ func Ship(shipType string, length int) types.Ship {
 	}
 }
 
-func Player(id int) types.Player {
+func Player(id int, playersTurn bool) types.Player {
 	return types.Player{
-		ID: id,
+		ID:          id,
+		PlayersTurn: playersTurn,
 	}
 }
 

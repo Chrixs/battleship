@@ -6,15 +6,24 @@ import (
 	shipservice "battleship/internal/ship-service"
 	types "battleship/internal/types"
 	"errors"
+	"strconv"
 )
 
-func CreateNewPlayer(id int) types.Player {
-	player := factory.Player(id)
+func CreateNewPlayer(id int, playersTurn bool) types.Player {
+	player := factory.Player(id, playersTurn)
 	player.Ships = shipservice.CreateNewFleet()
 	return player
 }
 
 func Fire(firingCoordinate int, attacker *types.Player, defender *types.Player) (types.FiredShot, error) {
+	if !attacker.PlayersTurn {
+		return factory.FiredShot(""), errors.New("it's not player " + strconv.Itoa(attacker.ID) + "'s turn")
+	}
+
+	if attacker.Winner || defender.Winner {
+		return factory.FiredShot(""), errors.New("game has ended")
+	}
+
 	for _, shot := range attacker.ShotsFired {
 		if shot == firingCoordinate {
 			return factory.FiredShot(""), errors.New("already fired at this location")
@@ -31,7 +40,11 @@ func Fire(firingCoordinate int, attacker *types.Player, defender *types.Player) 
 
 	if isDead(defender) {
 		firedShot.Winner = true
+		attacker.Winner = true
 	}
+
+	attacker.PlayersTurn = false
+	defender.PlayersTurn = true
 
 	return firedShot, nil
 }

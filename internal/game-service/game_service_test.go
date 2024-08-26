@@ -55,8 +55,8 @@ func TestCanFireOnShipAndReturnHit(t *testing.T) {
 	carrier := factory.Ship("Carrier", 5)
 	carrier.Coordinates = []int{1, 2, 3, 4, 5}
 
-	playerOne := factory.Player(1)
-	playerTwo := factory.Player(2)
+	playerOne := factory.Player(1, true)
+	playerTwo := factory.Player(2, false)
 	playerTwo.Ships = []types.Ship{carrier}
 
 	_, firedShot, _ := FireCalculation(1, playerOne, playerTwo)
@@ -68,8 +68,8 @@ func TestCanFireOnShipAndReturnMiss(t *testing.T) {
 	carrier := factory.Ship("Carrier", 5)
 	carrier.Coordinates = []int{1, 2, 3, 4, 5}
 
-	playerOne := factory.Player(1)
-	playerTwo := factory.Player(2)
+	playerOne := factory.Player(1, true)
+	playerTwo := factory.Player(2, false)
 	playerTwo.Ships = []types.Ship{carrier}
 
 	_, firedShot, _ := FireCalculation(6, playerOne, playerTwo)
@@ -82,8 +82,8 @@ func TestCanFireOnShipAndDetectSunk(t *testing.T) {
 	carrier.Coordinates = []int{1, 2, 3, 4, 5}
 	carrier.Health = 1
 
-	playerOne := factory.Player(1)
-	playerTwo := factory.Player(2)
+	playerOne := factory.Player(1, true)
+	playerTwo := factory.Player(2, false)
 	playerTwo.Ships = []types.Ship{carrier}
 
 	_, firedShot, _ := FireCalculation(1, playerOne, playerTwo)

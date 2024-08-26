@@ -20,8 +20,8 @@ func main() {
 	e := echo.New()
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	playerOne := playerservice.CreateNewPlayer(1)
-	playerTwo := playerservice.CreateNewPlayer(2)
+	playerOne := playerservice.CreateNewPlayer(1, true)
+	playerTwo := playerservice.CreateNewPlayer(2, false)
 
 	e.GET("/", func(c echo.Context) error {
 		jsonResponse := types.JsonResponse{
@@ -42,8 +42,8 @@ func main() {
 	})
 
 	e.GET("/reset", func(c echo.Context) error {
-		playerOne = playerservice.CreateNewPlayer(1)
-		playerTwo = playerservice.CreateNewPlayer(2)
+		playerOne = playerservice.CreateNewPlayer(1, true)
+		playerTwo = playerservice.CreateNewPlayer(2, false)
 		jsonResponse := types.JsonResponse{
 			Status:  http.StatusOK,
 			Success: true,

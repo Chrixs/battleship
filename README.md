@@ -20,7 +20,7 @@ If you don't have Go already installed you can either run
 $ brew install go
 ```
 
-Or if you can go [here](https://go.dev/doc/install) and follow intructions to install it.
+Or you can go [here](https://go.dev/doc/install) and follow the intructions to install it.
 
 Once Go is installed we can get the project setup
 
@@ -67,7 +67,7 @@ Or with `curl`
 curl --header "Content-Type: application/json" --request PUT --data '{"shipType":"Carrier","coordinate":1,"isVertical":false}' http://localhost:1323/player/1/deploy
 ```
 
-which should return the deployed ship object
+which should return the deployed ship object.
 
 ```
 {
@@ -107,8 +107,8 @@ Or with `curl`
 curl --header "Content-Type: application/json" --request PUT --data '{"coordinate":50}' http://localhost:1323/player/1/fire
 ```
 
-Where the player ID is the attacking player
-On a miss or a hit you should expect something like this
+Where the player ID is the attacking player.
+On a miss or a hit you should expect something like this.
 
 ```
 {
@@ -120,7 +120,7 @@ On a miss or a hit you should expect something like this
 }
 ```
 
-If all enemy player ships are destroyed after a successful shot the response will indicate your win
+If all enemy player ships are destroyed after a successful shot the response will indicate your win.
 
 ```
 {
