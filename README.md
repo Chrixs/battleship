@@ -14,7 +14,13 @@ There are 5 ship types:
 
 ## Installation and setup
 
-Go [here](https://go.dev/doc/install) and follow intructions to install Go if you don't have it installed already.
+If you don't have Go already installed you can either run
+
+```
+$ brew install go
+```
+
+Or if you can go [here](https://go.dev/doc/install) and follow intructions to install it.
 
 Once Go is installed we can get the project setup
 
