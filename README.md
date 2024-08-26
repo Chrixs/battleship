@@ -42,6 +42,8 @@ $ go test ./...
 
 ## API Usage
 
+All request data should be Json formated
+
 ### Get players
 
 `GET http://localhost:1323/players` displays all players and their related data.
@@ -57,6 +59,12 @@ A deploy request would look something like this<br>
     "coordinate": 87,
     "isVertical": false
 }
+```
+
+Or with `curl`
+
+```
+curl --header "Content-Type: application/json" --request PUT --data '{"shipType":"Carrier","coordinate":1,"isVertical":false}' http://localhost:1323/player/1/deploy
 ```
 
 which should return the deployed ship object
@@ -91,6 +99,12 @@ A fire request would look like this. <br>
 {
     "coordinate": 50
 }
+```
+
+Or with `curl`
+
+```
+curl --header "Content-Type: application/json" --request PUT --data '{"coordinate":50}' http://localhost:1323/player/1/fire
 ```
 
 Where the player ID is the attacking player
