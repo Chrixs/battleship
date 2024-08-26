@@ -2,7 +2,7 @@
 
 ## Project overview
 
-This is an API designed to allow two players to play a game of battleship over the internet. The game takes place on a 10x10 grid with each space numbered from 1-100.
+This is an API designed to allow two players to play a game of battleship over the internet. The game takes place on a 10x10 grid with each space numbered from 1-100, starting with 1 at the top left and ending with 100 at the bottom right.
 
 There are 5 ship types:
 
@@ -87,6 +87,7 @@ A fire request would look like this. <br>
 }
 ```
 
+Where the player ID is the attacking player
 On a miss or a hit you should expect something like this
 
 ```
